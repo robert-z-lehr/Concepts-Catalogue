@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Robert's Concepts Catalogue</title>
+  <meta name="description" content="A structured catalogue of concepts, project ideas, and feedback channels." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <p class="eyebrow">Concepts Catalogue</p>
+      <h1>Robert's Concepts</h1>
+      <p class="tagline">A tabbed atlas of project concepts, structured with observation, significance, method, distribution, scope, timing, decision path, constraints, resources, and failure mitigation.</p>
+    </div>
+  </header>
+
+  <nav class="tab-shell" aria-label="Concept navigation">
+    <div class="tabs" id="tabs"></div>
+  </nav>
+
+  <main class="page-shell">
+    <section id="content" class="content-panel" aria-live="polite"></section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© <span id="year"></span> Robert Z. Lehr. Static site hosted with GitHub Pages.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
