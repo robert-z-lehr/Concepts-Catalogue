@@ -20,13 +20,20 @@ html {
 
 body {
   margin: 0;
-  background: linear-gradient(180deg, #0b0d13 0%, #111521 100%);
+  background:
+    radial-gradient(circle at top left, rgba(110,80,255,0.18), transparent 30%),
+    radial-gradient(circle at top right, rgba(40,120,255,0.12), transparent 28%),
+    linear-gradient(180deg, #0b1020 0%, #111827 100%);
   color: var(--text);
   font-family: 'Inter', sans-serif;
+  transition: background 400ms ease;
 }
 
 .site-header {
   padding: 3rem 1.5rem 2rem;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(160,120,255,0.18), transparent 25%),
+    linear-gradient(180deg, #101426 0%, #151b2f 100%);
 }
 
 .header-inner {
@@ -75,14 +82,12 @@ h1 {
 .tab {
   border: 1px solid var(--border);
   border-bottom: none;
-  background: linear-gradient(180deg, #2a3143 0%, #1c2230 100%);
   color: var(--muted);
   padding: 0.9rem 1.2rem;
   border-radius: 18px 18px 0 0;
   cursor: pointer;
   transform: translateY(10px);
   transition: all 180ms ease;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
   white-space: nowrap;
   font-weight: 600;
 }
@@ -93,11 +98,8 @@ h1 {
 }
 
 .tab.active {
-  background: linear-gradient(180deg, #41506f 0%, #232c3f 100%);
   color: white;
   transform: translateY(0px);
-  box-shadow: var(--shadow);
-  border-color: rgba(95,168,255,0.4);
 }
 
 .page-shell {
@@ -107,11 +109,71 @@ h1 {
 .content-panel {
   max-width: 1400px;
   margin: 0 auto;
-  background: linear-gradient(180deg, #171c28 0%, #111521 100%);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 2rem;
   box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+  transition: background 450ms ease, border-color 450ms ease;
+}
+
+body[data-art='atlas-night'] .content-panel {
+  background:
+    radial-gradient(circle at top left, rgba(120,80,255,0.18), transparent 28%),
+    linear-gradient(180deg, #171c28 0%, #111521 100%);
+}
+
+body[data-art='sun-civic'] .content-panel {
+  background:
+    radial-gradient(circle at top right, rgba(255,180,40,0.22), transparent 24%),
+    linear-gradient(135deg, #2a1d0f 0%, #1b2234 100%);
+}
+
+body[data-art='paper-fold'] .content-panel {
+  background:
+    linear-gradient(125deg, rgba(255,255,255,0.03) 25%, transparent 25%),
+    linear-gradient(225deg, rgba(255,255,255,0.03) 25%, transparent 25%),
+    linear-gradient(180deg, #251826 0%, #17141f 100%);
+  background-size: 60px 60px;
+}
+
+body[data-art='cezanne-earth'] .content-panel {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(194,120,40,0.22), transparent 26%),
+    radial-gradient(circle at 80% 60%, rgba(70,120,90,0.18), transparent 28%),
+    linear-gradient(180deg, #2b241d 0%, #17151a 100%);
+}
+
+body[data-art='anamorphic-stage'] .content-panel {
+  background:
+    linear-gradient(135deg, rgba(255,0,200,0.12), transparent 30%),
+    radial-gradient(circle at center, rgba(160,80,255,0.12), transparent 35%),
+    linear-gradient(180deg, #181322 0%, #101116 100%);
+}
+
+body[data-art='burnt-orange-tabs'] .content-panel {
+  background:
+    radial-gradient(circle at top right, rgba(191,87,0,0.24), transparent 24%),
+    linear-gradient(180deg, #25170d 0%, #12151f 100%);
+}
+
+body[data-art='token-pop'] .content-panel,
+body[data-art='civic-grid'] .content-panel,
+body[data-art='analytic-prism'] .content-panel,
+body[data-art='interface-glass'] .content-panel,
+body[data-art='brutalist-pair'] .content-panel,
+body[data-art='illuminated-note'] .content-panel,
+body[data-art='street-pattern'] .content-panel,
+body[data-art='warning-gradient'] .content-panel,
+body[data-art='energy-flow'] .content-panel,
+body[data-art='fashion-mechanism'] .content-panel,
+body[data-art='outside-box'] .content-panel,
+body[data-art='color-music'] .content-panel,
+body[data-art='cool-air'] .content-panel,
+body[data-art='method-grid'] .content-panel {
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 22%, transparent), transparent 28%),
+    linear-gradient(180deg, #181c28 0%, #10141d 100%);
 }
 
 .hero {
@@ -121,8 +183,8 @@ h1 {
   align-items: start;
 }
 
-.hero:has(.concept-image-frame.expanded) {
-  grid-template-columns: minmax(520px, 760px) 1fr;
+.hero-expanded {
+  grid-template-columns: minmax(540px, 760px) 1fr;
 }
 
 .concept-image-frame {
@@ -134,12 +196,14 @@ h1 {
   background: #111827;
   box-shadow: var(--shadow);
   cursor: zoom-in;
-  transition: max-width 220ms ease, transform 220ms ease, border-color 220ms ease;
+  transition: transform 240ms ease, border-color 240ms ease;
 }
 
 .concept-image-frame.expanded {
   cursor: zoom-out;
   border-color: rgba(95,168,255,0.45);
+  transform: scale(1.08);
+  z-index: 20;
 }
 
 .concept-image {
@@ -223,10 +287,11 @@ h1 {
 }
 
 .framework-card {
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
   border-radius: 16px;
   padding: 1rem;
+  backdrop-filter: blur(8px);
 }
 
 .framework-card h3 {
@@ -287,7 +352,7 @@ button {
 
 @media (max-width: 860px) {
   .hero,
-  .hero:has(.concept-image-frame.expanded) {
+  .hero-expanded {
     grid-template-columns: 1fr;
   }
 
