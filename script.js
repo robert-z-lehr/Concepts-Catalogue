@@ -1,5 +1,6 @@
 const FORM_ENDPOINT = 'https://formspree.io/f/mdabjdal';
 const OWNER_EMAIL = 'robert.z.lehr@gmail.com';
+const DEFAULT_CONCEPT_IMAGE = './assets/concepts/default.svg';
 
 const frameworkLabels = [
   'What (Observation)',
@@ -57,13 +58,13 @@ function createTabs() {
 function renderConcept(index) {
   document.querySelectorAll('.tab').forEach((tab, i) => tab.classList.toggle('active', i === index));
   const concept = concepts[index];
-  const imagePath = `assets/concepts/${slugify(concept.acronym)}.svg`;
+  const imagePath = `./assets/concepts/${slugify(concept.acronym)}.svg`;
   const cards = frameworkLabels.map((label, i) => `<article class="framework-card"><h3>${label}</h3><p>${concept.sections[i]}</p></article>`).join('');
 
   contentContainer.innerHTML = `
     <section class="hero">
       <figure class="concept-image-frame">
-        <img class="concept-image" src="${imagePath}" alt="Illustration for ${concept.title}" loading="lazy" />
+        <img class="concept-image" src="${imagePath}" alt="Illustration for ${concept.title}" loading="lazy" onerror="this.onerror=null;this.src='${DEFAULT_CONCEPT_IMAGE}';" />
       </figure>
       <div class="concept-meta">
         <p class="acronym">${concept.acronym}</p>
