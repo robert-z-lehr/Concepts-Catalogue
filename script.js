@@ -38,12 +38,11 @@ const concepts = [
   { acronym:'UTEET', title:'UT Engineering Elevator Tabs', description:'Removable informational elevator tabs highlighting UT engineering research and initiatives.', sections:['Elevator spaces are underutilized communication surfaces.','Could expose students and visitors to active research.','Uses removable QR-linked informational tabs between elevator gaps.','Benefits departments, students, and research visibility.','Applicable in engineering and academic buildings.','Useful during events, showcases, and recruiting.','Can rotate dynamically with new projects.','Building permissions and durability are constraints.','Requires fabrication, curation, and institutional approval.','Poor design could create visual clutter or maintenance issues.'] }
 ];
 
+let carouselIndex = 0;
+let currentCarouselImages = [];
+
 const tabsContainer = document.getElementById('tabs');
 const contentContainer = document.getElementById('content');
-
-function slugify(text) {
-  return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-}
 
 function createTabs() {
   concepts.forEach((concept, index) => {
@@ -55,16 +54,25 @@ function createTabs() {
   });
 }
 
+function getCarouselImages(concept) {
+  if (Array.isArray(concept.images) && concept.images.length > 0) return concept.images;
+  return [DEFAULT_CONCEPT_IMAGE];
+}
+
 function renderConcept(index) {
   document.querySelectorAll('.tab').forEach((tab, i) => tab.classList.toggle('active', i === index));
   const concept = concepts[index];
-  const imagePath = `./assets/concepts/${slugify(concept.acronym)}.svg`;
+  currentCarouselImages = getCarouselImages(concept);
+  carouselIndex = 0;
   const cards = frameworkLabels.map((label, i) => `<article class="framework-card"><h3>${label}</h3><p>${concept.sections[i]}</p></article>`).join('');
 
   contentContainer.innerHTML = `
     <section class="hero">
-      <figure class="concept-image-frame">
-        <img class="concept-image" src="${imagePath}" alt="Illustration for ${concept.title}" loading="lazy" onerror="this.onerror=null;this.src='${DEFAULT_CONCEPT_IMAGE}';" />
+      <figure class="concept-image-frame carousel" aria-label="Image carousel for ${concept.title}">
+        <button class="carousel-button carousel-button-left" type="button" aria-label="Previous image">‹</button>
+        <img class="concept-image" src="${currentCarouselImages[carouselIndex]}" alt="Illustration for ${concept.title}" loading="lazy" />
+        <button class="carousel-button carousel-button-right" type="button" aria-label="Next image">›</button>
+        <figcaption class="carousel-count">${carouselIndex + 1} / ${currentCarouselImages.length}</figcaption>
       </figure>
       <div class="concept-meta">
         <p class="acronym">${concept.acronym}</p>
@@ -83,7 +91,26 @@ function renderConcept(index) {
         <p class="form-status"></p>
       </form>
     </section>`;
+
+  attachCarouselHandlers(concept.title);
   attachFeedbackHandler();
+}
+
+function attachCarouselHandlers(conceptTitle) {
+  const image = document.querySelector('.concept-image');
+  const count = document.querySelector('.carousel-count');
+  const prev = document.querySelector('.carousel-button-left');
+  const next = document.querySelector('.carousel-button-right');
+
+  function updateCarousel(direction) {
+    carouselIndex = (carouselIndex + direction + currentCarouselImages.length) % currentCarouselImages.length;
+    image.src = currentCarouselImages[carouselIndex];
+    image.alt = `Illustration ${carouselIndex + 1} for ${conceptTitle}`;
+    count.textContent = `${carouselIndex + 1} / ${currentCarouselImages.length}`;
+  }
+
+  prev.addEventListener('click', () => updateCarousel(-1));
+  next.addEventListener('click', () => updateCarousel(1));
 }
 
 function attachFeedbackHandler() {
