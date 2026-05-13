@@ -1,4 +1,4 @@
-const FORM_ENDPOINT = ''; // Replace with your real Formspree endpoint, e.g. https://formspree.io/f/abcdwxyz
+const FORM_ENDPOINT = 'https://formspree.io/f/mdabjdal'; // Replace with your real Formspree endpoint, e.g. https://formspree.io/f/abcdwxyz
 const OWNER_EMAIL = 'robert.z.lehr@gmail.com';
 
 const frameworkSections = [
