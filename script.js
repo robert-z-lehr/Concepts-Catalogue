@@ -1,3 +1,6 @@
+const FORM_ENDPOINT = ''; // Replace with your real Formspree endpoint, e.g. https://formspree.io/f/abcdwxyz
+const OWNER_EMAIL = 'robert.z.lehr@gmail.com';
+
 const frameworkSections = [
   ['What (Observation)', 'Define the core issue or fact observed.'],
   ['Why (Significance / Non-significance)', 'Explain why it matters or might not matter.'],
@@ -115,8 +118,9 @@ function renderConcept(index) {
       <h2>Feedback</h2>
       <p class="tagline">Submit feedback, ideas, critiques, collaboration proposals, references, or implementation suggestions.</p>
 
-      <form action="https://formspree.io/f/xovwjjgd" method="POST">
+      <form class="feedback-form" data-concept="${concept.title}">
         <input type="hidden" name="concept" value="${concept.title}" />
+        <input type="hidden" name="_subject" value="Concepts Catalogue Feedback: ${concept.title}" />
 
         <label>
           Optional Email
@@ -129,9 +133,55 @@ function renderConcept(index) {
         </label>
 
         <button type="submit">Submit Feedback</button>
+        <p class="form-status" aria-live="polite"></p>
       </form>
     </section>
   `;
+
+  attachFeedbackHandler();
+}
+
+function attachFeedbackHandler() {
+  const form = document.querySelector('.feedback-form');
+  const status = form.querySelector('.form-status');
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(form);
+    const concept = formData.get('concept');
+    const visitorEmail = formData.get('email');
+    const message = formData.get('message');
+
+    if (!FORM_ENDPOINT) {
+      const subject = encodeURIComponent(`Concepts Catalogue Feedback: ${concept}`);
+      const body = encodeURIComponent(
+        `Concept: ${concept}\n` +
+        `Visitor email: ${visitorEmail || 'Not provided'}\n\n` +
+        `Feedback:\n${message}`
+      );
+      window.location.href = `mailto:${OWNER_EMAIL}?subject=${subject}&body=${body}`;
+      status.textContent = 'Opening your email app because no live Formspree endpoint has been configured yet.';
+      return;
+    }
+
+    try {
+      const response = await fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        body: formData,
+        headers: { Accept: 'application/json' }
+      });
+
+      if (!response.ok) {
+        throw new Error('Form service rejected the submission.');
+      }
+
+      form.reset();
+      status.textContent = 'Feedback submitted.';
+    } catch (error) {
+      status.textContent = 'Submission failed. Check the form endpoint or try again later.';
+    }
+  });
 }
 
 createTabs();
