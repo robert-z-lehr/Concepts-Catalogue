@@ -1,0 +1,17 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#101827"/><stop offset="1" stop-color="#203354"/></linearGradient></defs>
+<rect width="1200" height="900" fill="url(#g)"/>
+<rect x="70" y="70" width="1060" height="760" rx="38" fill="#121b2c" stroke="#9b8cff" stroke-width="5"/>
+<text x="120" y="165" fill="#f5f7ff" font-size="64" font-family="Arial, sans-serif" font-weight="700">Concept Map</text>
+<text x="120" y="220" fill="#a8b3cf" font-size="28" font-family="Arial, sans-serif">Catalogue structure, tabs, feedback, and evolving project records</text>
+<g stroke="#9b8cff" stroke-width="5" fill="none" opacity=".85">
+<path d="M310 440 L520 330 L740 420 L930 300"/>
+<path d="M310 440 L510 575 L740 420 L900 610"/>
+</g>
+<g fill="#1e2b44" stroke="#64d2ff" stroke-width="4">
+<circle cx="310" cy="440" r="70"/><circle cx="520" cy="330" r="70"/><circle cx="740" cy="420" r="70"/><circle cx="930" cy="300" r="70"/><circle cx="510" cy="575" r="70"/><circle cx="900" cy="610" r="70"/>
+</g>
+<g fill="#e6ebf5" font-family="Arial, sans-serif" font-size="26" font-weight="700" text-anchor="middle">
+<text x="310" y="448">Index</text><text x="520" y="338">Ideas</text><text x="740" y="428">Tabs</text><text x="930" y="308">Media</text><text x="510" y="583">Forms</text><text x="900" y="618">Archive</text>
+</g>
+</svg>
