@@ -16,8 +16,24 @@ const frameworkLabels = [
 ];
 
 const concepts = [
-  { acronym:'CATALOGUE', title:'Concepts Index', description:'Central index of experimental systems, public infrastructure concepts, educational tools, and design frameworks.', sections:['An organized atlas of concepts and research directions.','Creates continuity across otherwise disconnected projects.','Structured as a navigable GitHub Pages knowledge system.','Useful to collaborators, reviewers, students, and institutions.','Applicable across engineering, design, education, and systems thinking.','Expands continuously as concepts evolve.','Used to evaluate which concepts deserve deeper development.','Requires maintenance and information architecture discipline.','Requires GitHub Pages, documentation effort, and media assets.','Without organization, concepts become fragmented and difficult to revisit.'] },
-  { acronym:'SMS', title:'Stoplight Mounted Shade', description:'Retrofit modular shade systems attached to traffic signal poles to reduce pedestrian heat exposure.', sections:['Urban intersections expose pedestrians to dangerous radiant heat.','Could reduce thermal stress, improve walkability, and support equity.','Uses modular cantilevered shade systems mounted to existing poles.','Benefits pedestrians, transit users, and heat-vulnerable populations.','Applicable primarily in dense urban corridors.','Most important during extreme heat periods.','Deployment depends on safety, cost, and maintenance tradeoffs.','Structural loads, permitting, and liability are major constraints.','Requires engineering analysis, municipal partnerships, and funding.','Improper designs could create visibility, wind, or maintenance issues.'] }
+  {
+    acronym:'CATALOGUE',
+    title:'Concepts Index',
+    theme:'#9b8cff',
+    images:[
+      './assets/concepts/default.svg',
+      './assets/concepts/catalogue-2.svg'
+    ],
+    description:'Central index of experimental systems, public infrastructure concepts, educational tools, and design frameworks.',
+    sections:['An organized atlas of concepts and research directions.','Creates continuity across otherwise disconnected projects.','Structured as a navigable GitHub Pages knowledge system.','Useful to collaborators, reviewers, students, and institutions.','Applicable across engineering, design, education, and systems thinking.','Expands continuously as concepts evolve.','Used to evaluate which concepts deserve deeper development.','Requires maintenance and information architecture discipline.','Requires GitHub Pages, documentation effort, and media assets.','Without organization, concepts become fragmented and difficult to revisit.']
+  },
+  {
+    acronym:'SMS',
+    title:'Stoplight Mounted Shade',
+    theme:'#f59e0b',
+    description:'Retrofit modular shade systems attached to traffic signal poles to reduce pedestrian heat exposure.',
+    sections:['Urban intersections expose pedestrians to dangerous radiant heat.','Could reduce thermal stress, improve walkability, and support equity.','Uses modular cantilevered shade systems mounted to existing poles.','Benefits pedestrians, transit users, and heat-vulnerable populations.','Applicable primarily in dense urban corridors.','Most important during extreme heat periods.','Deployment depends on safety, cost, and maintenance tradeoffs.','Structural loads, permitting, and liability are major constraints.','Requires engineering analysis, municipal partnerships, and funding.','Improper designs could create visibility, wind, or maintenance issues.']
+  }
 ];
 
 let carouselIndex = 0;
@@ -31,6 +47,8 @@ function createTabs() {
     const button = document.createElement('button');
     button.className = 'tab';
     button.textContent = concept.acronym;
+    button.style.background = `linear-gradient(180deg, ${concept.theme}55 0%, #1c2230 100%)`;
+    button.style.borderColor = `${concept.theme}66`;
     button.addEventListener('click', () => renderConcept(index));
     tabsContainer.appendChild(button);
   });
@@ -42,10 +60,19 @@ function getCarouselImages(concept) {
 }
 
 function renderConcept(index) {
-  document.querySelectorAll('.tab').forEach((tab, i) => tab.classList.toggle('active', i === index));
+  document.querySelectorAll('.tab').forEach((tab, i) => {
+    tab.classList.toggle('active', i === index);
+    if (i === index) {
+      tab.style.boxShadow = `0 10px 30px ${concepts[index].theme}44`;
+      tab.style.background = `linear-gradient(180deg, ${concepts[index].theme}aa 0%, #232c3f 100%)`;
+    }
+  });
+
   const concept = concepts[index];
   currentCarouselImages = getCarouselImages(concept);
   carouselIndex = 0;
+
+  document.documentElement.style.setProperty('--accent', concept.theme);
 
   const cards = frameworkLabels.map((label, i) => `
     <article class="framework-card">
@@ -57,20 +84,13 @@ function renderConcept(index) {
   contentContainer.innerHTML = `
     <section class="hero">
       <figure class="concept-image-frame carousel" aria-label="Image carousel for ${concept.title}">
-        <button class="carousel-button carousel-button-left" type="button" aria-label="Previous image">‹</button>
+        <button class="carousel-button carousel-button-left" type="button">‹</button>
 
-        <img
-          class="concept-image"
-          src="${currentCarouselImages[carouselIndex]}"
-          alt="Illustration for ${concept.title}"
-          loading="lazy"
-        />
+        <img class="concept-image" src="${currentCarouselImages[carouselIndex]}" alt="Illustration for ${concept.title}" loading="lazy" />
 
-        <button class="carousel-button carousel-button-right" type="button" aria-label="Next image">›</button>
+        <button class="carousel-button carousel-button-right" type="button">›</button>
 
-        <figcaption class="carousel-count">
-          ${carouselIndex + 1} / ${currentCarouselImages.length}
-        </figcaption>
+        <figcaption class="carousel-count">${carouselIndex + 1} / ${currentCarouselImages.length}</figcaption>
       </figure>
 
       <div class="concept-meta">
@@ -84,20 +104,10 @@ function renderConcept(index) {
 
     <section class="feedback">
       <h2>Feedback</h2>
-
       <form class="feedback-form">
         <input type="hidden" name="concept" value="${concept.title}" />
-
-        <label>
-          Optional Email
-          <input type="email" name="email" placeholder="your@email.com" />
-        </label>
-
-        <label>
-          Feedback
-          <textarea name="message" required></textarea>
-        </label>
-
+        <label>Optional Email<input type="email" name="email" placeholder="your@email.com" /></label>
+        <label>Feedback<textarea name="message" required></textarea></label>
         <button type="submit">Submit Feedback</button>
         <p class="form-status"></p>
       </form>
@@ -116,7 +126,6 @@ function attachCarouselHandlers(conceptTitle) {
 
   function updateCarousel(direction) {
     carouselIndex = (carouselIndex + direction + currentCarouselImages.length) % currentCarouselImages.length;
-
     image.src = currentCarouselImages[carouselIndex];
     image.alt = `Illustration ${carouselIndex + 1} for ${conceptTitle}`;
     count.textContent = `${carouselIndex + 1} / ${currentCarouselImages.length}`;
@@ -132,8 +141,18 @@ function attachCarouselHandlers(conceptTitle) {
     updateCarousel(1);
   });
 
-  frame.addEventListener('click', () => {
+  frame.addEventListener('click', (event) => {
+    if (event.target.closest('.carousel-button')) return;
+
     frame.classList.toggle('expanded');
+
+    if (frame.classList.contains('expanded')) {
+      frame.style.transform = 'scale(1.18)';
+      frame.style.zIndex = '20';
+      frame.style.position = 'relative';
+    } else {
+      frame.style.transform = 'scale(1)';
+    }
   });
 }
 
@@ -146,14 +165,11 @@ function attachFeedbackHandler() {
 
     const formData = new FormData(form);
 
-    formData.append(
-      'submitted_at_local',
-      new Date().toLocaleString('en-US', {
-        timeZone: 'America/Chicago',
-        dateStyle: 'full',
-        timeStyle: 'long'
-      })
-    );
+    formData.append('submitted_at_local', new Date().toLocaleString('en-US', {
+      timeZone: 'America/Chicago',
+      dateStyle: 'full',
+      timeStyle: 'long'
+    }));
 
     formData.append('submitted_timezone', 'America/Chicago');
 
