@@ -48,9 +48,7 @@ function styleTabs(activeIndex) {
     const theme = concepts[i].theme;
     tab.classList.toggle('active', i === activeIndex);
     tab.style.borderColor = `${theme}66`;
-    tab.style.background = i === activeIndex
-      ? `linear-gradient(180deg, ${theme}bb 0%, #232c3f 100%)`
-      : `linear-gradient(180deg, ${theme}55 0%, #1c2230 100%)`;
+    tab.style.background = i === activeIndex ? `linear-gradient(180deg, ${theme}bb 0%, #232c3f 100%)` : `linear-gradient(180deg, ${theme}55 0%, #1c2230 100%)`;
     tab.style.boxShadow = i === activeIndex ? `0 10px 30px ${theme}44` : 'inset 0 1px 0 rgba(255,255,255,0.05)';
   });
 }
@@ -70,7 +68,7 @@ function renderConcept(index) {
 
   contentContainer.innerHTML = `
     <section class="hero">
-      <figure class="concept-image-frame carousel" aria-label="Image carousel for ${concept.title}">
+      <figure class="concept-image-frame carousel" aria-label="Image carousel for ${concept.title}" title="Click image area to expand or shrink">
         <button class="carousel-button carousel-button-left" type="button">‹</button>
         <img class="concept-image" src="${currentCarouselImages[0]}" alt="Illustration for ${concept.title}" loading="lazy" />
         <button class="carousel-button carousel-button-right" type="button">›</button>
@@ -87,6 +85,7 @@ function renderConcept(index) {
 
 function attachCarouselHandlers(conceptTitle) {
   const frame = document.querySelector('.concept-image-frame');
+  const hero = document.querySelector('.hero');
   const image = document.querySelector('.concept-image');
   const count = document.querySelector('.carousel-count');
   const prev = document.querySelector('.carousel-button-left');
@@ -99,10 +98,14 @@ function attachCarouselHandlers(conceptTitle) {
     count.textContent = `${carouselIndex + 1} / ${currentCarouselImages.length}`;
   }
 
+  function toggleExpanded() {
+    frame.classList.toggle('expanded');
+    hero.classList.toggle('hero-expanded');
+  }
+
   prev.addEventListener('click', e => { e.stopPropagation(); updateCarousel(-1); });
   next.addEventListener('click', e => { e.stopPropagation(); updateCarousel(1); });
-  image.addEventListener('click', () => frame.classList.toggle('expanded'));
-  frame.addEventListener('click', e => { if (!e.target.closest('.carousel-button')) frame.classList.toggle('expanded'); });
+  frame.addEventListener('click', e => { if (!e.target.closest('.carousel-button')) toggleExpanded(); });
 }
 
 function attachFeedbackHandler() {
